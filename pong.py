@@ -1,4 +1,5 @@
 import pygame
+import player
 
 # pygame setup
 pygame.init()
@@ -21,25 +22,20 @@ player_width = 10
 player_height = 100
 player_speed = 2
 
-player1_x = player_width + 50
-player1_y = height // 2
-player2_x = (width - player_width) - 50
-player2_y = height // 2
+player1 = player.Player()
+player2 = player.Player()
+player1.set_x(player_width + 50)
+player1.set_y(height // 2)
+player2.set_x(width - player_width - 50)
+player2.set_y(height // 2)
 
-# game loop
-while running:
-    # pygame.QUIT event means the user clicked X to close your window
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
+def draw_players():
+    pygame.draw.rect(screen, TEAL, (player1.get_x(), player1.get_y(), player_width, player_height))
+    pygame.draw.rect(screen, TEAL, (player2.get_x(), player2.get_y(), player_width, player_height))
 
-    screen.fill(BLACK)
-
-    # draw players
-    pygame.draw.rect(screen, TEAL, (player1_x, player1_y, player_width, player_height))
-    pygame.draw.rect(screen, TEAL, (player2_x, player2_y, player_width, player_height))
-
-    # move player
+def move_players():
+    player1_y = player1.get_y()
+    player2_y = player2.get_y()
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         player1_y -= 300 * dt * player_speed
@@ -50,6 +46,21 @@ while running:
         player2_y -= 300 * dt * player_speed
     if keys[pygame.K_DOWN]:
         player2_y += 300 * dt * player_speed
+
+    player1.set_y(player1_y)
+    player2.set_y(player2_y)
+
+# game loop
+while running:
+    # pygame.QUIT event means the user clicked X to close your window
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill(BLACK)
+
+    draw_players()
+    move_players()
 
     # flip() the display to put your work on screen
     pygame.display.flip()
