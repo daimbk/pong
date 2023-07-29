@@ -1,5 +1,7 @@
 import pygame
 import player
+import ball
+from random import choice, randint
 
 # pygame setup
 pygame.init()
@@ -29,6 +31,16 @@ player1.set_y(height // 2)
 player2.set_x(width - player_width - 50)
 player2.set_y(height // 2)
 
+# set up ball
+ball = ball.Ball()
+ball_color = WHITE
+ball.set_radius(5)
+ball.set_x(width // 2)
+ball.set_y(height // 2)
+ball.set_dx(choice([-2, 2]))
+ball.set_dy(-2)
+ball.set_speed(2)
+
 def draw_players():
     pygame.draw.rect(screen, TEAL, (player1.get_x(), player1.get_y(), player_width, player_height))
     pygame.draw.rect(screen, TEAL, (player2.get_x(), player2.get_y(), player_width, player_height))
@@ -36,6 +48,7 @@ def draw_players():
 def move_players():
     player1_y = player1.get_y()
     player2_y = player2.get_y()
+
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         player1_y -= 300 * dt * player_speed
@@ -50,6 +63,17 @@ def move_players():
     player1.set_y(player1_y)
     player2.set_y(player2_y)
 
+def draw_ball():
+    pygame.draw.circle(screen, ball_color, (ball.get_x(), ball.get_y()), ball.get_radius())
+
+def move_ball():
+    ball_x = ball.get_x()
+    ball_y = ball.get_y()
+    ball_x += ball.get_dx() * ball.get_speed()
+    ball_y += ball.get_dy() * ball.get_speed()
+    ball.set_x(ball_x)
+    ball.set_y(ball_y)
+
 # game loop
 while running:
     # pygame.QUIT event means the user clicked X to close your window
@@ -60,7 +84,9 @@ while running:
     screen.fill(BLACK)
 
     draw_players()
+    draw_ball()
     move_players()
+    move_ball()
 
     # flip() the display to put your work on screen
     pygame.display.flip()
