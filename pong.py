@@ -11,7 +11,7 @@ screen = pygame.display.set_mode((width, height))
 pygame.display.set_caption("Pong")
 running = True
 clock = pygame.time.Clock()
-dt = 0 # delta time in seconds since last frame
+dt = 0  # delta time in seconds since last frame
 
 # colors
 TEAL = (0, 128, 128)
@@ -41,9 +41,13 @@ ball.set_dx(choice([-2, 2]))
 ball.set_dy(-2)
 ball.set_speed(2)
 
+
 def draw_players():
-    pygame.draw.rect(screen, TEAL, (player1.get_x(), player1.get_y(), player_width, player_height))
-    pygame.draw.rect(screen, TEAL, (player2.get_x(), player2.get_y(), player_width, player_height))
+    pygame.draw.rect(screen, TEAL, (player1.get_x(),
+                     player1.get_y(), player_width, player_height))
+    pygame.draw.rect(screen, TEAL, (player2.get_x(),
+                     player2.get_y(), player_width, player_height))
+
 
 def move_players():
     player1_y = player1.get_y()
@@ -63,16 +67,29 @@ def move_players():
     player1.set_y(player1_y)
     player2.set_y(player2_y)
 
+
 def draw_ball():
-    pygame.draw.circle(screen, ball_color, (ball.get_x(), ball.get_y()), ball.get_radius())
+    pygame.draw.circle(screen, ball_color, (ball.get_x(),
+                       ball.get_y()), ball.get_radius())
+
 
 def move_ball():
     ball_x = ball.get_x()
     ball_y = ball.get_y()
-    ball_x += ball.get_dx() * ball.get_speed()
-    ball_y += ball.get_dy() * ball.get_speed()
+    ball_dx = ball.get_dx()
+    ball_dy = ball.get_dy()
+
+    # collision issue
+    if ball_y <= ball.get_radius():
+        # ball_y = ball.get_radius()
+        ball_dy *= -1
+
+    ball_x += ball_dx * ball.get_speed()
+    ball_y += ball_dy * ball.get_speed()
+
     ball.set_x(ball_x)
     ball.set_y(ball_y)
+
 
 # game loop
 while running:
