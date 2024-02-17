@@ -79,16 +79,18 @@ def move_ball():
     ball_dx = ball.get_dx()
     ball_dy = ball.get_dy()
 
-    # collision issue
-    if ball_y <= ball.get_radius():
-        # ball_y = ball.get_radius()
-        ball_dy *= -1
-
+    # update ball position
     ball_x += ball_dx * ball.get_speed()
     ball_y += ball_dy * ball.get_speed()
 
+    # check collision with top and bottom boundaries
+    if ball_y <= ball.get_radius() or ball_y >= height - ball.get_radius():
+        ball_dy *= -1
+
     ball.set_x(ball_x)
     ball.set_y(ball_y)
+    ball.set_dx(ball_dx)
+    ball.set_dy(ball_dy)
 
 
 # game loop
