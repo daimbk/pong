@@ -39,7 +39,7 @@ ball.set_x(width // 2)
 ball.set_y(height // 2)
 ball.set_dx(choice([-2, 2]))
 ball.set_dy(-2)
-ball.set_speed(2)
+ball.set_speed(3.5)
 
 # init scores
 score_player1 = 0
