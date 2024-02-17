@@ -87,6 +87,16 @@ def move_ball():
     if ball_y <= ball.get_radius() or ball_y >= height - ball.get_radius():
         ball_dy *= -1
 
+    # check collision with player1 paddle
+    if ball_x - ball.get_radius() <= player1.get_x() + player_width and \
+            player1.get_y() <= ball_y <= player1.get_y() + player_height:
+        ball_dx *= -1
+
+    # check collision with player2 paddle
+    if ball_x + ball.get_radius() >= player2.get_x() and \
+            player2.get_y() <= ball_y <= player2.get_y() + player_height:
+        ball_dx *= -1
+
     ball.set_x(ball_x)
     ball.set_y(ball_y)
     ball.set_dx(ball_dx)
