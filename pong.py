@@ -1,7 +1,7 @@
 import pygame
 import player
 import ball
-from random import choice, randint
+from random import choice
 
 # pygame setup
 pygame.init()
@@ -41,6 +41,11 @@ ball.set_dx(choice([-2, 2]))
 ball.set_dy(-2)
 ball.set_speed(2)
 
+# init scores
+score_player1 = 0
+score_player2 = 0
+font = pygame.font.Font(None, 36)
+
 
 def draw_players():
     pygame.draw.rect(screen, TEAL, (player1.get_x(),
@@ -74,6 +79,8 @@ def draw_ball():
 
 
 def move_ball():
+    global score_player1, score_player2
+
     ball_x = ball.get_x()
     ball_y = ball.get_y()
     ball_dx = ball.get_dx()
@@ -97,10 +104,41 @@ def move_ball():
             player2.get_y() <= ball_y <= player2.get_y() + player_height:
         ball_dx *= -1
 
-    ball.set_x(ball_x)
-    ball.set_y(ball_y)
-    ball.set_dx(ball_dx)
-    ball.set_dy(ball_dy)
+    # check if the ball goes past player1 paddle
+    if ball_x > width:
+        score_player1 += 1
+        reset_screen()
+    # check if the ball goes past player2 paddle
+    elif ball_x < 0:
+        score_player2 += 1
+        reset_screen()
+    else:
+        ball.set_x(ball_x)
+        ball.set_y(ball_y)
+        ball.set_dx(ball_dx)
+        ball.set_dy(ball_dy)
+
+
+def reset_screen():
+    ball.set_x(width // 2)
+    ball.set_y(height // 2)
+    ball.set_dx(choice([-2, 2]))
+    ball.set_dy(-2)
+
+    player1.set_x(player_width + 50)
+    player1.set_y(height // 2)
+    player2.set_x(width - player_width - 50)
+    player2.set_y(height // 2)
+
+
+def draw_scores():
+    score_text_player1 = font.render(
+        "Player 1: " + str(score_player1), True, WHITE)
+    score_text_player2 = font.render(
+        "Player 2: " + str(score_player2), True, WHITE)
+    screen.blit(score_text_player1, (20, 20))
+    screen.blit(score_text_player2,
+                (width - score_text_player2.get_width() - 20, 20))
 
 
 # game loop
@@ -116,6 +154,7 @@ while running:
     draw_ball()
     move_players()
     move_ball()
+    draw_scores()
 
     # flip() the display to put your work on screen
     pygame.display.flip()
